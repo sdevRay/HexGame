@@ -62,32 +62,47 @@ namespace HexGame
 
         public void SetupHexagons()
 		{
-            var col = (int)(_screenWidth / (_hexTexture.Width * 0.2f));
+            var offset = new Vector2(10, 10);
 
-            Debug.WriteLine(_screenWidth);
-            Debug.WriteLine(_hexTexture.Width);
-            Debug.WriteLine(col);
+            var cols = 3;
+            var rows = 3;
 
-            _hexes = new Hex[(int)col];
-            var xPos = 0;
-            var yPos = 0;
-            for (int i = 0; i < col; i++)
-			{
-                Debug.WriteLine(xPos);
+            var scaleHeight = _hexTexture.Height * 0.2f;
+            var scaleWidth = (int)_hexTexture.Width * 0.2f;
+
+            _hexes = new Hex[(cols * rows)];
+            var num = 0;
+
+            var position = new Vector2(0, 0); // <- this needs its own loop
 
 
-                _hexes[i] = new Hex() { Position = new Vector2(xPos, yPos) };
-                yPos += (int)((_hexTexture.Height * 0.2f) / 2);
-                xPos += (int)(_hexTexture.Width * 0.2f) - (int)((_hexTexture.Width * 0.2f) / 4);
-			}
+				//Debug.WriteLine("DEBUG Y {0}, {1}", y, position.Y);
+				for (int x = 0; x < cols; x++)
+                {
 
-        }
+                for (int y = 0; y < rows; y++)
+                {
+                }
+
+                    _hexes[num++] = new Hex() { Position = new Vector2(position.X, position.Y) };
+
+                    position.X += (int)(_hexTexture.Width * 0.1f) + ((int)(_hexTexture.Width * 0.1f) * 0.5f);
+
+			    }
+
+
+                //position.X = (int)(_hexTexture.Width * 0.1f) - (int)((_hexTexture.Height * 0.1f) / 4);
+                position.X = ((int)(_hexTexture.Width * 0.1f) / 4) + ((int)(_hexTexture.Width * 0.1f) * 0.5f) * y;
+                position.Y = (int)(_hexTexture.Height * 0.1f) - ((int)(_hexTexture.Height * 0.1f) * 0.5f);
+			
+
+		}
 
         public void DrawHexagons()
 		{
             for(int i = 0; i < _hexes.Length; i++)
 			{
-                _spriteBatch.Draw(_hexTexture, _hexes[i].Position, null, Color.White, 0, new Vector2(0, 0), 0.2f, SpriteEffects.None, 1);
+                _spriteBatch.Draw(_hexTexture, _hexes[i].Position, null, Color.White, 0, new Vector2(0, 0), 0.1f, SpriteEffects.None, 1);
             }
         }
 
@@ -106,7 +121,6 @@ namespace HexGame
 
             _spriteBatch.Begin();
             DrawHexagons();
-            //_spriteBatch.Draw(_hexTexture, new Vector2(0, 0), null, Color.White, 0, new Vector2(0, 0), 0.2f, SpriteEffects.None, 1);
             DrawText();
             _spriteBatch.End();
 
