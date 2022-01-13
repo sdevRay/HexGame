@@ -1,18 +1,10 @@
-﻿using Microsoft.Xna.Framework;
+﻿using HexGame.Sprites;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System;
-using System.Diagnostics;
 
 namespace HexGame
 {
-    public struct Hex
-	{
-        public Vector2 Position;
-        public Texture2D Texture;
-        public float Scale;
-    }
-
     public class GameRoot : Game
     {
         private GraphicsDeviceManager _graphics;
@@ -22,10 +14,13 @@ namespace HexGame
         private int _screenWidth;
         private int _screenHeight;
 
+        private Texture2D _texture;
+
         private Texture2D _hexTexture;
         private SpriteFont _font;
 
         private Hex[] _hexes;
+        private float _hexScale;
 
         public GameRoot()
         {
@@ -36,8 +31,8 @@ namespace HexGame
 
         protected override void Initialize()
         {
-            _graphics.PreferredBackBufferWidth = 500;
-            _graphics.PreferredBackBufferHeight = 500;
+            _graphics.PreferredBackBufferWidth = 1280;
+            _graphics.PreferredBackBufferHeight = 720;
             _graphics.IsFullScreen = false;
             _graphics.ApplyChanges();
 
@@ -57,52 +52,64 @@ namespace HexGame
             _font = Content.Load<SpriteFont>("font");
             _hexTexture = Content.Load<Texture2D>("hexagon");
 
+            _texture = Content.Load<Texture2D>("texture");
+
+            _hexScale = 0.1f;
+
+            //LoadMapFile();
+            // map file is just a saved JSON, has location (0, 0) and terrain texture coordinates (or an enum value tied to these coordinates).
+            // These details are plugged into the SetupHexagons method to set those values
+
             SetupHexagons();
         }
 
+
         public void SetupHexagons()
 		{
-            var offset = new Vector2(10, 10);
+            var cols = 8;
+            var rows = 12;
 
-            var cols = 3;
-            var rows = 3;
-
-            var scaleHeight = _hexTexture.Height * 0.2f;
-            var scaleWidth = (int)_hexTexture.Width * 0.2f;
+            var scaleHeight = (int)(_hexTexture.Height * _hexScale);
+            var scaleWidth = (int)(_hexTexture.Width * _hexScale);
 
             _hexes = new Hex[(cols * rows)];
-            var num = 0;
+            var index = 0;
 
-            var position = new Vector2(0, 0); // <- this needs its own loop
+            var offset = new Vector2(25, 25);
+            var position = new Vector2(offset.X, offset.Y);
 
-
-				//Debug.WriteLine("DEBUG Y {0}, {1}", y, position.Y);
-				for (int x = 0; x < cols; x++)
+            // Save (X, Y) for each hex in a file
+            for (int y = 0; y < rows; y++)
+            {
+                for (int x = 0; x < cols; x++)
                 {
+                    if (y % 2 == 0 && x == 0)
+                    {
+                        position.X += (scaleWidth * 3) / 4;
+                    }
 
-                for (int y = 0; y < rows; y++)
-                {
+                    _hexes[index++] = new Hex() 
+                    { 
+                        Texture = _hexTexture, 
+                        Position = new Vector2(position.X, position.Y),
+                        TerrainTexure = _texture, // <- texture can come from somewhere else
+                    };
+
+                    position.X += scaleWidth + (scaleWidth * 0.5f);
                 }
 
-                    _hexes[num++] = new Hex() { Position = new Vector2(position.X, position.Y) };
-
-                    position.X += (int)(_hexTexture.Width * 0.1f) + ((int)(_hexTexture.Width * 0.1f) * 0.5f);
-
-			    }
-
-
-                //position.X = (int)(_hexTexture.Width * 0.1f) - (int)((_hexTexture.Height * 0.1f) / 4);
-                position.X = ((int)(_hexTexture.Width * 0.1f) / 4) + ((int)(_hexTexture.Width * 0.1f) * 0.5f) * y;
-                position.Y = (int)(_hexTexture.Height * 0.1f) - ((int)(_hexTexture.Height * 0.1f) * 0.5f);
-			
-
+                position.X = offset.X;
+                position.Y += scaleHeight * 0.5f;
+            }
 		}
 
         public void DrawHexagons()
 		{
             for(int i = 0; i < _hexes.Length; i++)
 			{
-                _spriteBatch.Draw(_hexTexture, _hexes[i].Position, null, Color.White, 0, new Vector2(0, 0), 0.1f, SpriteEffects.None, 1);
+                _spriteBatch.Draw(_hexes[i].TerrainTexure, _hexes[i].Position, null, _hexes[i].Color, 0, new Vector2(0, 0), _hexScale, SpriteEffects.None, 1);
+                _spriteBatch.Draw(_hexes[i].Texture, _hexes[i].Position, null, _hexes[i].Color, 0, new Vector2(0, 0), _hexScale, SpriteEffects.None,1);
+
             }
         }
 
