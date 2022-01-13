@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.IO;
 
 namespace HexGame
 {
@@ -22,6 +23,8 @@ namespace HexGame
         private Hex[] _hexes;
         private float _hexScale;
 
+        private const string _filePath = @"test.json";
+
         public GameRoot()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -31,6 +34,12 @@ namespace HexGame
 
         protected override void Initialize()
         {
+            // load file here
+
+            //LoadMapFile();
+            // map file is just a saved JSON, has location (0, 0) and terrain texture coordinates (or an enum value tied to these coordinates).
+            // These details are plugged into the SetupHexagons method to set those values
+
             _graphics.PreferredBackBufferWidth = 1280;
             _graphics.PreferredBackBufferHeight = 720;
             _graphics.IsFullScreen = false;
@@ -56,9 +65,7 @@ namespace HexGame
 
             _hexScale = 0.1f;
 
-            //LoadMapFile();
-            // map file is just a saved JSON, has location (0, 0) and terrain texture coordinates (or an enum value tied to these coordinates).
-            // These details are plugged into the SetupHexagons method to set those values
+   
 
             SetupHexagons();
         }
@@ -90,6 +97,7 @@ namespace HexGame
 
                     _hexes[index++] = new Hex() 
                     { 
+                        Location = new Vector2(x, y),
                         Texture = _hexTexture, 
                         Position = new Vector2(position.X, position.Y),
                         TerrainTexure = _texture, // <- texture can come from somewhere else
@@ -101,7 +109,7 @@ namespace HexGame
                 position.X = offset.X;
                 position.Y += scaleHeight * 0.5f;
             }
-		}
+        }
 
         public void DrawHexagons()
 		{
