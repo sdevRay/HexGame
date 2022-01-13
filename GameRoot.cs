@@ -109,6 +109,8 @@ namespace HexGame
                 position.X = offset.X;
                 position.Y += scaleHeight * 0.5f;
             }
+
+            FileManager.Write(_hexes);
         }
 
         public void DrawHexagons()

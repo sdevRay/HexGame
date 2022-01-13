@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace HexGame.Sprites
 {
-    internal class Sprite
+    public class Sprite
     {
         public Vector2 Position;
         public Texture2D Texture;
