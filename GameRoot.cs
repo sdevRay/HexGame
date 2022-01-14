@@ -1,8 +1,7 @@
-﻿using HexGame.Sprites;
+﻿using HexGame.Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System.IO;
 
 namespace HexGame
 {
@@ -15,10 +14,7 @@ namespace HexGame
         private int _screenWidth;
         private int _screenHeight;
 
-        private Texture2D _texture;
 
-        private Texture2D _hexTexture;
-        private SpriteFont _font;
 
         private Hex[] _hexes;
         private float _hexScale;
@@ -58,14 +54,7 @@ namespace HexGame
             _screenWidth = _device.PresentationParameters.BackBufferWidth;
             _screenHeight = _device.PresentationParameters.BackBufferHeight;
 
-            _font = Content.Load<SpriteFont>("font");
-            _hexTexture = Content.Load<Texture2D>("hexagon");
-
-            _texture = Content.Load<Texture2D>("texture");
-
-            _hexScale = 0.1f;
-
-   
+           _hexScale = 0.1f;
 
             SetupHexagons();
         }
@@ -146,7 +135,9 @@ namespace HexGame
 
         public void DrawText()
         {
-            _spriteBatch.DrawString(_font, "Test", new Vector2(20, 20), Color.White);
+            _spriteBatch.DrawString(Art.Font, "Test", new Vector2(20, 20), Color.White);
         }
     }
 }
+
+// https://github.com/sdevRay/ShapeBlaster/blob/master/ShapeBlaster/GameRoot.cs
