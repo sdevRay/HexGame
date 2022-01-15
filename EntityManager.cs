@@ -23,13 +23,13 @@ namespace HexGame
             }
         }
 
-        public static void AddEntity(Entity entity)
+        private static void AddEntity(Entity entity)
         {
             _entities.Add(entity);
 
             if (entity is Hex)
             {
-                 
+                _hexes.Add(entity as Hex);
             }
         }
 
@@ -37,7 +37,7 @@ namespace HexGame
         {
             foreach(var entity in _entities)
             {
-                entity.Equals(spriteBatch);
+                entity.Draw(spriteBatch);
             }
         }
     }

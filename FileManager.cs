@@ -2,7 +2,7 @@
 
 namespace HexGame
 {
-    public static class FileManager
+    static class FileManager
     {
         public static void Read(string filePath)
         {
@@ -10,9 +10,9 @@ namespace HexGame
 
         }
 
-        public static void Write(Hex[] model)
-        {
+        //public static void Write(Hex[] model)
+        //{
 
-        }
+        //}
     }
 }
