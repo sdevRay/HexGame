@@ -3,11 +3,10 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace HexGame.Entities
 {
-    abstract class Entity
+    public abstract class Entity
     {
-        protected Rectangle SourceRectangle;
-        protected Color Color = Color.White;
-        public Vector2 Position;
+        public Color Color;
+        public Vector2 ScreenCoordinates;
         public float Scale;
 
         public abstract void Update(GameTime gameTime);

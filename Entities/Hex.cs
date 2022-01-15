@@ -1,20 +1,25 @@
-﻿using HexGame.Types;
+﻿using HexGame.Managers;
+using HexGame.Types;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Diagnostics;
 
 namespace HexGame.Entities
 {
-    class Hex : Entity
+    public class Hex : Entity
     {
         public Vector2 Location;
-        public TerrainType TerrainType;
+        public TextureType TextureType;
 
-        public Hex(Vector2 position, Vector2 location, TerrainType terrainType, float scale)
+        public Hex()
         {
-            Position = position;
+
+        }
+
+        public Hex(Vector2 position, Vector2 location, TextureType terrainType, float scale)
+        {
+            ScreenCoordinates = position;
             Location = location;
-            TerrainType = terrainType;
+            TextureType = terrainType;
             Scale = scale;
         }
 
@@ -24,8 +29,8 @@ namespace HexGame.Entities
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(Art.TextureAtlas, Position, ScenarioManager.GetSourceRectangle(TerrainType), Color, 0, new Vector2(0, 0), Scale, SpriteEffects.None,0);
-            spriteBatch.Draw(Art.TextureAtlas, Position, ScenarioManager.GetSourceRectangle(TerrainType.Hexagon), Color, 0, new Vector2(0, 0), Scale, SpriteEffects.None, 1);
+            spriteBatch.Draw(Art.TextureAtlas, ScreenCoordinates, ScenarioManager.GetSourceRectangle(TextureType), Color, 0, new Vector2(0, 0), Scale, SpriteEffects.None,0);
+            spriteBatch.Draw(Art.TextureAtlas, ScreenCoordinates, ScenarioManager.GetSourceRectangle(TextureType.Hexagon), Color, 0, new Vector2(0, 0), Scale, SpriteEffects.None, 1);
         }
     }
 }

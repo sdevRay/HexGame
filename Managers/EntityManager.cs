@@ -2,13 +2,13 @@
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 
-namespace HexGame
+namespace HexGame.Managers
 {
     static class EntityManager
     {
         private static List<Entity> _entities = new List<Entity>();
         private static List<Entity> _addedEntities = new List<Entity>();
-        public static List<Hex> _hexes = new List<Hex>();
+        private static List<Hex> _hexes = new List<Hex>();
 
         private static bool _isUpdating;
         public static void Add(Entity entity)

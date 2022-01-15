@@ -1,7 +1,10 @@
 ﻿using HexGame.Entities;
+using HexGame.Managers;
+using HexGame.Types;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
 
 namespace HexGame
 {
@@ -50,6 +53,20 @@ namespace HexGame
             _screenHeight = _device.PresentationParameters.BackBufferHeight;
 
             Art.Load(Content);
+
+            var test = new List<Hex>();
+            test.Add(new Hex(new Vector2(0, 0), new Vector2(0, 0), TextureType.Road, 0.5f));
+
+            var t = new Scenario()
+            {
+                Columns = 5,
+                Rows = 5,
+                Description = "Fart",
+                Title = "Tutle and styff",
+                Hexes = test
+            };
+
+            ScenarioManager.LoadScenario("t");
             //ScenarioManager.SetupHexagons();
         }
 

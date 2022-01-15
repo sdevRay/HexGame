@@ -1,6 +1,6 @@
 ﻿namespace HexGame.Types
 {
-    enum TerrainType
+    public enum TextureType
     {
         Hexagon,
         Woods,
