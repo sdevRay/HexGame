@@ -14,8 +14,6 @@ namespace HexGame
         private int _screenWidth;
         private int _screenHeight;
 
-        private float _hexScale;
-
         private const string _filePath = @"test.json";
 
         public GameRoot()
@@ -51,10 +49,8 @@ namespace HexGame
             _screenWidth = _device.PresentationParameters.BackBufferWidth;
             _screenHeight = _device.PresentationParameters.BackBufferHeight;
 
-           _hexScale = 0.1f;
-
             Art.Load(Content);
-            ScenarioManager.SetupHexagons();
+            //ScenarioManager.SetupHexagons();
         }
 
         protected override void Update(GameTime gameTime)

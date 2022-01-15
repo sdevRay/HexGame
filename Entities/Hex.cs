@@ -12,7 +12,6 @@ namespace HexGame.Entities
 
         public Hex(Vector2 position, Vector2 location, TerrainType terrainType, float scale)
         {
-            Texture = Art.HexagonTexture;
             Position = position;
             Location = location;
             TerrainType = terrainType;
@@ -25,10 +24,8 @@ namespace HexGame.Entities
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if(TerrainType != null)
-                spriteBatch.Draw(Art.TerrainAtlas, Position, ScenarioManager.GetSourceRectangle(TerrainType), Color, 0, new Vector2(0, 0), Scale, SpriteEffects.None,0);
-
-            spriteBatch.Draw(Texture, Position, null, Color, 0, new Vector2(0, 0), Scale, SpriteEffects.None, 1);
+            spriteBatch.Draw(Art.TextureAtlas, Position, ScenarioManager.GetSourceRectangle(TerrainType), Color, 0, new Vector2(0, 0), Scale, SpriteEffects.None,0);
+            spriteBatch.Draw(Art.TextureAtlas, Position, ScenarioManager.GetSourceRectangle(TerrainType.Hexagon), Color, 0, new Vector2(0, 0), Scale, SpriteEffects.None, 1);
         }
     }
 }

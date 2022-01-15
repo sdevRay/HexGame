@@ -2,7 +2,7 @@
 {
     enum TerrainType
     {
-        Grass,
+        Hexagon,
         Woods,
         Road,
         Dirt

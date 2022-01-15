@@ -8,36 +8,50 @@ namespace HexGame
 {
     static class ScenarioManager
     {
-        private static float _hexScale = 0.1f;
+        private static float _hexScale = 0.5f;
 
-        public static void SetupHexagons()
+        public static void LoadMap()
         {
-            var cols = 8;
-            var rows = 12;
 
-            var scaleHeight = (int)(Art.HexagonTexture.Height * _hexScale);
-            var scaleWidth = (int)(Art.HexagonTexture.Width * _hexScale);
+            var screenCoordDict = GetScreenCoordinatesDict(8, 12);
+            // https://gavindraper.com/2010/11/25/how-to-loadsave-game-state-in-xna/
+            // https://community.monogame.net/t/solved-need-a-save-game-example/9136/4
 
-            var offset = new Vector2(25, 25);
+        }
+
+        private static IDictionary<Vector2, Vector2> GetScreenCoordinatesDict(int rows, int columns)
+        {
+
+            var dict = new Dictionary<Vector2, Vector2>();
+
+            var srcRect = GetSourceRectangle(TerrainType.Hexagon);
+            var scaleHeight = (int)(srcRect.Height * _hexScale);
+            var scaleWidth = (int)(srcRect.Width * _hexScale);
+
+            var offset = new Vector2(25, 25); // Offset from the upper-left corner
             var position = new Vector2(offset.X, offset.Y);
 
             for (int y = 0; y < rows; y++)
             {
-                for (int x = 0; x < cols; x++)
+                for (int x = 0; x < columns; x++)
                 {
                     if (y % 2 == 0 && x == 0)
                     {
                         position.X += (scaleWidth * 3) / 4;
                     }
 
-                    var terrainType = TerrainType.Grass;
-                    if(y == 3)
-                    {
-                        terrainType = TerrainType.Woods;
-                    }
+                    //// if equal x and y assign stuff based on whats found in file
+                    //var terrainType = TerrainType.Woods;
 
-                    EntityManager.Add(new Hex(new Vector2(position.X, position.Y), new Vector2(x, y), terrainType, _hexScale));
+                    //if(x == 5)
+                    //{
+                    //    terrainType = TerrainType.Dirt;
+                    //}
 
+                    dict.Add(new Vector2(x, y), position);
+                    //var hex = new Hex(new Vector2(position.X, position.Y), new Vector2(x, y), terrainType, _hexScale);
+
+                    //EntityManager.Add(hex);
 
                     position.X += scaleWidth + (scaleWidth * 0.5f);
                 }
@@ -45,18 +59,21 @@ namespace HexGame
                 position.X = offset.X;
                 position.Y += scaleHeight * 0.5f;
             }
+
+            return dict;
         }
 
-
-        private static readonly IDictionary<TerrainType, Rectangle> TerrainTypeMapping = new Dictionary<TerrainType, Rectangle>()
+        private static readonly IDictionary<TerrainType, Rectangle> TerrainTypeTextureAtlasMapping = new Dictionary<TerrainType, Rectangle>()
         {
-            { TerrainType.Grass, new Rectangle(0, 0, 443, 384) },
-            { TerrainType.Woods, new Rectangle(443, 384, 443, 384) }
+            { TerrainType.Hexagon, new Rectangle(0, 0, 222, 192) },
+            { TerrainType.Woods, new Rectangle(222, 0, 222, 192) },
+            { TerrainType.Road, new Rectangle(0, 192, 222, 192) },
+            { TerrainType.Dirt, new Rectangle(222, 192, 222, 192) }
         };
 
         public static Rectangle GetSourceRectangle(TerrainType terrainType)
         {
-            if (TerrainTypeMapping.TryGetValue(terrainType, out Rectangle rectangle))
+            if (TerrainTypeTextureAtlasMapping.TryGetValue(terrainType, out Rectangle rectangle))
             {
                 return rectangle;
             }
