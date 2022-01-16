@@ -1,10 +1,9 @@
 ﻿using HexGame.Entities;
 using HexGame.Managers;
-using HexGame.Types;
+using HexGame.Models;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System.Collections.Generic;
 
 namespace HexGame
 {
@@ -17,7 +16,7 @@ namespace HexGame
         private int _screenWidth;
         private int _screenHeight;
 
-        private const string _filePath = @"test.json";
+        private Hex _hex;
 
         public GameRoot()
         {
@@ -28,12 +27,6 @@ namespace HexGame
 
         protected override void Initialize()
         {
-            // load file here
-
-            //LoadMapFile();
-            // map file is just a saved JSON, has location (0, 0) and terrain texture coordinates (or an enum value tied to these coordinates).
-            // These details are plugged into the SetupHexagons method to set those values
-
             _graphics.PreferredBackBufferWidth = 1280;
             _graphics.PreferredBackBufferHeight = 720;
             _graphics.IsFullScreen = false;
@@ -54,20 +47,24 @@ namespace HexGame
 
             Art.Load(Content);
 
-            var test = new List<Hex>();
-            test.Add(new Hex(new Vector2(0, 0), new Vector2(0, 0), TextureType.Road, 0.5f));
-
-            var t = new Scenario()
+            var test = new Scenario()
             {
                 Columns = 5,
                 Rows = 5,
                 Description = "Fart",
                 Title = "Tutle and styff",
-                Hexes = test
+                Hexes = ScenarioManager.CreateHexes(5, 10)
             };
 
-            ScenarioManager.LoadScenario("t");
-            //ScenarioManager.SetupHexagons();
+            // ScenarioManager.LoadScenario(test);
+            //var scn = ScenarioManager.LoadFile("test1.xml");
+            ScenarioManager.LoadScenario(test);
+            //ScenarioManager.SaveFile(test);
+            //ScenarioManager.CreateHexes(5, 5);
+
+           // _hex = new Hex(new Vector2(0, 0), new Vector2(0, 0), Types.TextureType.Hexagon, 0.5f);
+           // EntityManager.Add(hex);
+
         }
 
         protected override void Update(GameTime gameTime)
@@ -76,6 +73,7 @@ namespace HexGame
                 Exit();
 
             Input.Update();
+            EntityManager.Update();
             base.Update(gameTime);
         }
 
@@ -83,8 +81,14 @@ namespace HexGame
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
+            var whiteRectangle = new Texture2D(GraphicsDevice, 1, 1);
+            whiteRectangle.SetData(new[] { Color.White });
+
+
             _spriteBatch.Begin();
             EntityManager.Draw(_spriteBatch);
+            EntityManager.DrawTest(_spriteBatch, whiteRectangle);
+            //_spriteBatch.Draw(whiteRectangle, new Rectangle(10, 20, 80, 30), Color.Chocolate);
             DrawText();
             _spriteBatch.End();
 

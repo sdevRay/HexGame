@@ -1,5 +1,7 @@
 ﻿using HexGame.Entities;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 
 namespace HexGame.Managers
@@ -31,6 +33,59 @@ namespace HexGame.Managers
             {
                 _hexes.Add(entity as Hex);
             }
+        }
+
+        public static void Update()
+        {
+            _isUpdating = true;
+
+            HandleCollisions();
+
+            foreach(var entity in _entities)
+            {
+                entity.Update();
+            }
+
+            _isUpdating = false;
+
+            foreach (var entity in _addedEntities)
+            {
+                AddEntity(entity);
+            }
+
+            _addedEntities.Clear();
+        }
+
+        private static void HandleCollisions()
+        {
+            foreach(var hex in _hexes)
+            {
+                if (IsPointHover(hex))
+                {
+                    hex.HandleCollisions();
+                }
+            }
+        }
+
+        public static void DrawTest(SpriteBatch spriteBatch, Texture2D texture)
+        {
+            foreach(var hex in _hexes)
+            {
+                hex.DrawBoundingBox(spriteBatch, texture, Color.Chocolate);
+            }
+        }
+
+        private static bool IsPointHover(Hex entity)
+        {
+            return entity.Bounds.Contains(Input.MousePosition);
+        }
+
+        private static bool IsColliding(Hex entity)
+        {
+            //float radius = entity.Radius + Input.Radius;
+            //return Vector2.DistanceSquared(entity.Position, Input.MousePosition) < radius * radius;
+
+            return false;
         }
 
         public static void Draw(SpriteBatch spriteBatch)

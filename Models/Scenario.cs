@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using HexGame.Entities;
+using System.Collections.Generic;
 
-namespace HexGame.Entities
+namespace HexGame.Models
 {
     public class Scenario
     {
@@ -8,6 +9,6 @@ namespace HexGame.Entities
         public int Columns = 0;
         public int Rows = 0;
         public string Description = "Scenario Description";
-        public List<Hex> Hexes;
+        public List<Hex> Hexes = new List<Hex>();
     }
 }

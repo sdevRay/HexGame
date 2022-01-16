@@ -1,15 +1,17 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace HexGame.Entities
 {
     public abstract class Entity
     {
-        public Color Color;
-        public Vector2 ScreenCoordinates;
+        public Color Color = Color.White;
+        public Vector2 Position;
         public float Scale;
+        public float Radius = 20;
 
-        public abstract void Update(GameTime gameTime);
+        public abstract void Update();
         public abstract void Draw(SpriteBatch spriteBatch);
     }
 }

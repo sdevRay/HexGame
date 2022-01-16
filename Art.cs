@@ -6,6 +6,7 @@ namespace HexGame
     static class Art
     {
         public static Texture2D TextureAtlas { get; private set; }
+
         public static SpriteFont Font { get; private set; }
 
         public static void Load(ContentManager content)
