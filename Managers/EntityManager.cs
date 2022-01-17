@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace HexGame.Managers
 {
@@ -64,6 +65,10 @@ namespace HexGame.Managers
                 {
                     hex.HandleCollisions();
                 }
+                else if(hex.HexagonColor != Color.Black)
+                {
+                    hex.HexagonColor = Color.Black;
+                }
             }
         }
 
@@ -77,6 +82,7 @@ namespace HexGame.Managers
 
         private static bool IsPointHover(Hex entity)
         {
+            //return Vector2.DistanceSquared(entity.Bounds.Center.ToVector2(), Input.MousePosition) < 20 * 20;
             return entity.Bounds.Contains(Input.MousePosition);
         }
 

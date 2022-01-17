@@ -55,36 +55,34 @@ namespace HexGame.Managers
             var scaleHeight = (int)(srcRect.Height * _hexScale);
             var scaleWidth = (int)(srcRect.Width * _hexScale);
 
-            var offset = new Vector2(25, 25); // Offset from the upper-left corner
+            var offset = new Vector2(25, 25 + (scaleHeight * 0.5f)); // Offset from the upper-left corner
             var position = new Vector2(offset.X, offset.Y);
             var hexes = new List<Hex>();
-            for (int y = 0; y < rows; y++)
+
+            for(int x = 0; x < rows; x++)
             {
-                for (int x = 0; x < columns; x++)
+                for(int y = 0; y < columns; y++)
                 {
-                    if (y % 2 == 0 && x == 0)
-                    {
-                        position.X += (scaleWidth * 3) / 4;
-                    }
-
-                    //// if equal x and y assign stuff based on whats found in file
-                    var terrainType = TextureType.Woods;
-
-                    //if(x == 5)
-                    //{
-                    //    terrainType = TerrainType.Dirt;
-                    //}
-
-                    var hex = new Hex(new Vector2(position.X, position.Y), new Vector2(x, y), terrainType, _hexScale);
-                    //EntityManager.Add(hex);
+                    // build Hex here
+                    // need to assign texturetype here or somewhere else
+                    var hex = new Hex(new Vector2(position.X, position.Y), new Vector2(x, y), TextureType.Woods, _hexScale);
                     hexes.Add(hex);
 
-                    position.X += scaleWidth + (scaleWidth * 0.5f);
+                    position.Y += scaleHeight;
                 }
 
-                position.X = offset.X;
-                position.Y += scaleHeight * 0.5f;
+                if(x % 2 == 0)
+                {
+                    position.Y = offset.Y - (scaleHeight * 0.5f);
+                }
+                else
+                {
+                    position.Y = offset.Y;
+                }
+
+                position.X += scaleWidth * 0.75f;
             }
+
             return hexes;
         }
 
