@@ -2,6 +2,7 @@
 using HexGame.Types;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Text;
 
 namespace HexGame.Entities
 {
@@ -9,8 +10,9 @@ namespace HexGame.Entities
     {
         public Vector2 Location;
         public TextureType TextureType;
-        public Color HexagonColor = Color.Black;
+        private Color HexagonColor = Color.Black;
         public Rectangle Bounds;
+        public bool IsSelected;
 
         public Hex()
         {
@@ -28,15 +30,15 @@ namespace HexGame.Entities
 
         public void SetBoundingRectangle()
         {
-
-            var sourceRect = ScenarioManager.GetSourceRectangle(TextureType);
+            var sourceRect = ScenarioManager.GetSourceRectangle(TextureType.Hexagon);
             var scaleWidth = sourceRect.Width * Scale;
             var scaleHeight = sourceRect.Height * Scale;
+            var margin = 20;
             var boundingRect = new Rectangle(
                 (int)Position.X + (int)(scaleWidth * 0.25f), 
-                (int)Position.Y, 
+                (int)Position.Y + margin, 
                 (int)scaleWidth - (int)(scaleWidth * 0.5f), 
-                (int)scaleHeight
+                (int)scaleHeight - (margin * 2)
                 );
 
             Bounds = boundingRect;
@@ -48,22 +50,38 @@ namespace HexGame.Entities
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            //spriteBatch.Draw(Art.TextureAtlas, Position, ScenarioManager.GetSourceRectangle(TextureType), Color, 0, new Vector2(0, 0), Scale, SpriteEffects.None,0);
+            spriteBatch.Draw(Art.TextureAtlas, Position, ScenarioManager.GetSourceRectangle(TextureType), Color, 0, new Vector2(0, 0), Scale, SpriteEffects.None,0);        
             spriteBatch.Draw(Art.TextureAtlas, Position, ScenarioManager.GetSourceRectangle(TextureType.Hexagon), HexagonColor, 0, new Vector2(0, 0), Scale, SpriteEffects.None, 1);
-            spriteBatch.DrawString(Art.Font, Location.ToString(), Position, Color.Black);
-
         }
 
-        public void DrawBoundingBox(SpriteBatch spriteBatch, Texture2D texture, Color color)
+        public void DrawBoundingBox(SpriteBatch spriteBatch, Texture2D pixel, Color color)
         {
-            spriteBatch.Draw(texture, Bounds, new Color(color, 0.25f));
+            spriteBatch.Draw(pixel, Bounds, new Color(color, 0.25f));
         }
 
-        public void HandleCollisions()
+        public void HandlePointHover(bool isPointHover)
         {
-            //Debug.WriteLine($"{Location} - {HexagonColor}");
-
-            HexagonColor = Color.Red;
+            if (isPointHover)
+            {
+                HexagonColor = Color.Red;
+                UserInterface.SetHoverHex(this);
+            }
+			else
+			{
+                if(HexagonColor != Color.Black)
+				{
+                    HexagonColor = Color.Black;
+                    UserInterface.ClearHoverHex();
+				}
+            }          
         }
-    }
+
+		public override string ToString()
+		{
+            var sb = new StringBuilder();
+            sb.AppendLine(Location.ToString());
+            sb.AppendLine(TextureType.ToString());
+            return sb.ToString();
+		}
+	}
 }

@@ -13,6 +13,11 @@ namespace HexGame
             _lastMouseState = _mouseState;
             _mouseState = Mouse.GetState();
         }
+
+        public static bool WasMouseLeftButtonPressed()
+		{
+            return _lastMouseState.LeftButton == ButtonState.Released && _mouseState.LeftButton == ButtonState.Pressed;
+        }
     }
 }
 

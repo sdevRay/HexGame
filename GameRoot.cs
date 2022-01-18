@@ -16,7 +16,7 @@ namespace HexGame
         private int _screenWidth;
         private int _screenHeight;
 
-        private Hex _hex;
+        private Texture2D Pixel;
 
         public GameRoot()
         {
@@ -45,7 +45,11 @@ namespace HexGame
             _screenWidth = _device.PresentationParameters.BackBufferWidth;
             _screenHeight = _device.PresentationParameters.BackBufferHeight;
 
+            Pixel = new Texture2D(GraphicsDevice, 1, 1);
+            Pixel.SetData(new[] { Color.White });
+
             Art.Load(Content);
+            UserInterface.SetupInfoBar(Pixel, _screenWidth, _screenHeight);
 
             var test = new Scenario()
             {
@@ -53,7 +57,7 @@ namespace HexGame
                 Rows = 5,
                 Description = "Fart",
                 Title = "Tutle and styff",
-                Hexes = ScenarioManager.CreateHexes(5, 10)
+                Hexes = ScenarioManager.CreateHexes(5, 5)
             };
 
             // ScenarioManager.LoadScenario(test);
@@ -74,6 +78,7 @@ namespace HexGame
 
             Input.Update();
             EntityManager.Update();
+            UserInterface.Update();
             base.Update(gameTime);
         }
 
@@ -81,23 +86,18 @@ namespace HexGame
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            var whiteRectangle = new Texture2D(GraphicsDevice, 1, 1);
-            whiteRectangle.SetData(new[] { Color.White });
 
 
             _spriteBatch.Begin();
             EntityManager.Draw(_spriteBatch);
-            EntityManager.DrawTest(_spriteBatch, whiteRectangle);
-            //_spriteBatch.Draw(whiteRectangle, new Rectangle(10, 20, 80, 30), Color.Chocolate);
-            DrawText();
+            EntityManager.DrawTest(_spriteBatch, Pixel);
+            UserInterface.Draw(_spriteBatch);
             _spriteBatch.End();
 
-            base.Draw(gameTime);
-        }
+            //_spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive);
+            //_spriteBatch.End();
 
-        public void DrawText()
-        {
-            _spriteBatch.DrawString(Art.Font, Input.MousePosition.ToString(), new Vector2(20, 20), Color.White);
+            base.Draw(gameTime);
         }
     }
 }

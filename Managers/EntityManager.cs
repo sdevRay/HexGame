@@ -1,13 +1,11 @@
 ﻿using HexGame.Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace HexGame.Managers
 {
-    static class EntityManager
+	static class EntityManager
     {
         private static List<Entity> _entities = new List<Entity>();
         private static List<Entity> _addedEntities = new List<Entity>();
@@ -61,28 +59,20 @@ namespace HexGame.Managers
         {
             foreach(var hex in _hexes)
             {
-                if (IsPointHover(hex))
-                {
-                    hex.HandleCollisions();
-                }
-                else if(hex.HexagonColor != Color.Black)
-                {
-                    hex.HexagonColor = Color.Black;
-                }
+                hex.HandlePointHover(IsPointHover(hex));
             }
         }
 
-        public static void DrawTest(SpriteBatch spriteBatch, Texture2D texture)
+        public static void DrawTest(SpriteBatch spriteBatch, Texture2D pixel)
         {
             foreach(var hex in _hexes)
             {
-                hex.DrawBoundingBox(spriteBatch, texture, Color.Chocolate);
+                hex.DrawBoundingBox(spriteBatch, pixel, Color.Chocolate);
             }
         }
 
         private static bool IsPointHover(Hex entity)
         {
-            //return Vector2.DistanceSquared(entity.Bounds.Center.ToVector2(), Input.MousePosition) < 20 * 20;
             return entity.Bounds.Contains(Input.MousePosition);
         }
 

@@ -63,9 +63,25 @@ namespace HexGame.Managers
             {
                 for(int y = 0; y < columns; y++)
                 {
-                    // build Hex here
-                    // need to assign texturetype here or somewhere else
-                    var hex = new Hex(new Vector2(position.X, position.Y), new Vector2(x, y), TextureType.Woods, _hexScale);
+					// build Hex here
+					// need to assign texturetype here or somewhere else
+
+                    var textureType = TextureType.Woods;
+
+                    if (x == 1 && y == 1)
+                    {
+                        textureType = TextureType.Road;
+
+                    }
+
+                    if (x == 2 && y == 1)
+                    {
+                        textureType = TextureType.Dirt;
+
+                    }
+
+
+                    var hex = new Hex(new Vector2(position.X, position.Y), new Vector2(x, y), textureType, _hexScale);
                     hexes.Add(hex);
 
                     position.Y += scaleHeight;
