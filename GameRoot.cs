@@ -1,4 +1,4 @@
-﻿using HexGame.Entities;
+﻿using HexGame.GameScreens;
 using HexGame.Managers;
 using HexGame.Models;
 using Microsoft.Xna.Framework;
@@ -7,8 +7,10 @@ using Microsoft.Xna.Framework.Input;
 
 namespace HexGame
 {
-    public class GameRoot : Game
+	public class GameRoot : Game
     {
+        public static GameRoot Instance { get; private set; }
+
         private GraphicsDeviceManager _graphics;
         private GraphicsDevice _device;
         private SpriteBatch _spriteBatch;
@@ -16,11 +18,12 @@ namespace HexGame
         private int _screenWidth;
         private int _screenHeight;
 
-        private Texture2D Pixel;
+        private Texture2D _pixel;
 
         public GameRoot()
         {
             _graphics = new GraphicsDeviceManager(this);
+            Instance = this;
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
@@ -34,6 +37,8 @@ namespace HexGame
 
             Window.Title = "HexGame";
 
+            GameScreenManager.Push(new StartupGameScreen());
+
             base.Initialize();
         }
 
@@ -45,11 +50,11 @@ namespace HexGame
             _screenWidth = _device.PresentationParameters.BackBufferWidth;
             _screenHeight = _device.PresentationParameters.BackBufferHeight;
 
-            Pixel = new Texture2D(GraphicsDevice, 1, 1);
-            Pixel.SetData(new[] { Color.White });
+            _pixel = new Texture2D(GraphicsDevice, 1, 1);
+            _pixel.SetData(new[] { Color.White });
 
             Art.Load(Content);
-            UserInterface.SetupInfoBar(Pixel, _screenWidth, _screenHeight);
+            UserInterface.SetupInfoBar(_pixel, _screenWidth, _screenHeight);
 
             var test = new Scenario()
             {
@@ -73,12 +78,14 @@ namespace HexGame
 
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
+            //if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            //    Exit();
 
-            Input.Update();
-            EntityManager.Update();
-            UserInterface.Update();
+            GameScreenManager.Update(gameTime);
+
+            //Input.Update();
+            //EntityManager.Update();
+            //UserInterface.Update();
             base.Update(gameTime);
         }
 
@@ -86,12 +93,13 @@ namespace HexGame
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-
-
             _spriteBatch.Begin();
-            EntityManager.Draw(_spriteBatch);
-            EntityManager.DrawTest(_spriteBatch, Pixel);
-            UserInterface.Draw(_spriteBatch);
+
+            GameScreenManager.Draw(_spriteBatch);
+
+            //EntityManager.Draw(_spriteBatch);
+            //EntityManager.DrawTest(_spriteBatch, _pixel);
+            //UserInterface.Draw(_spriteBatch);
             _spriteBatch.End();
 
             //_spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive);

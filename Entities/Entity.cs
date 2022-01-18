@@ -1,10 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 
 namespace HexGame.Entities
 {
-    public abstract class Entity
+	public abstract class Entity
     {
         public Color Color = Color.White;
         public Vector2 Position;
