@@ -1,13 +1,10 @@
-﻿using HexGame.GameScreens;
-using HexGame.Managers;
-using HexGame.Models;
+﻿using HexGame.GameStates;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 namespace HexGame
 {
-	public class GameRoot : Game
+    public class GameRoot : Game
     {
         public static GameRoot Instance { get; private set; }
 
@@ -37,8 +34,6 @@ namespace HexGame
 
             Window.Title = "HexGame";
 
-            GameScreenManager.Push(new StartupGameScreen());
-
             base.Initialize();
         }
 
@@ -46,34 +41,42 @@ namespace HexGame
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _device = _graphics.GraphicsDevice;
+            GameStateManager.Instance.SetContent(Content);
 
             _screenWidth = _device.PresentationParameters.BackBufferWidth;
             _screenHeight = _device.PresentationParameters.BackBufferHeight;
 
+
+
             _pixel = new Texture2D(GraphicsDevice, 1, 1);
             _pixel.SetData(new[] { Color.White });
 
-            Art.Load(Content);
-            UserInterface.SetupInfoBar(_pixel, _screenWidth, _screenHeight);
+            //Art.Load(Content);
+            //UserInterface.SetupInfoBar(_pixel, _screenWidth, _screenHeight);
 
-            var test = new Scenario()
-            {
-                Columns = 5,
-                Rows = 5,
-                Description = "Fart",
-                Title = "Tutle and styff",
-                Hexes = ScenarioManager.CreateHexes(5, 5)
-            };
+            //var test = new Scenario()
+            //{
+            //    Columns = 5,
+            //    Rows = 5,
+            //    Description = "Fart",
+            //    Title = "Tutle and styff",
+            //    Hexes = ScenarioManager.CreateHexes(5, 5)
+            //};
 
             // ScenarioManager.LoadScenario(test);
             //var scn = ScenarioManager.LoadFile("test1.xml");
-            ScenarioManager.LoadScenario(test);
+            //ScenarioManager.LoadScenario(test);
             //ScenarioManager.SaveFile(test);
             //ScenarioManager.CreateHexes(5, 5);
 
-           // _hex = new Hex(new Vector2(0, 0), new Vector2(0, 0), Types.TextureType.Hexagon, 0.5f);
-           // EntityManager.Add(hex);
+            // _hex = new Hex(new Vector2(0, 0), new Vector2(0, 0), Types.TextureType.Hexagon, 0.5f);
+            // EntityManager.Add(hex);
+            GameStateManager.Instance.AddScreen(new ScenarioEditorScreen(_device));
+        }
 
+        protected override void UnloadContent()
+        {
+            GameStateManager.Instance.UnloadContent();
         }
 
         protected override void Update(GameTime gameTime)
@@ -81,7 +84,7 @@ namespace HexGame
             //if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             //    Exit();
 
-            GameScreenManager.Update(gameTime);
+            GameStateManager.Instance.Update(gameTime);
 
             //Input.Update();
             //EntityManager.Update();
@@ -93,14 +96,14 @@ namespace HexGame
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            _spriteBatch.Begin();
+            //_spriteBatch.Begin();
 
-            GameScreenManager.Draw(_spriteBatch);
+            GameStateManager.Instance.Draw(_spriteBatch);
 
             //EntityManager.Draw(_spriteBatch);
             //EntityManager.DrawTest(_spriteBatch, _pixel);
             //UserInterface.Draw(_spriteBatch);
-            _spriteBatch.End();
+            //_spriteBatch.End();
 
             //_spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive);
             //_spriteBatch.End();
