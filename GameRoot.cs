@@ -7,15 +7,12 @@ namespace HexGame
     public class GameRoot : Game
     {
         public static GameRoot Instance { get; private set; }
+        public static Vector2 ScreenSize => new Vector2(Instance._graphics.PreferredBackBufferWidth, Instance._graphics.PreferredBackBufferHeight);
+        public static Viewport Viewport => Instance._device.Viewport;
 
         private GraphicsDeviceManager _graphics;
         private GraphicsDevice _device;
         private SpriteBatch _spriteBatch;
-
-        private int _screenWidth;
-        private int _screenHeight;
-
-        private Texture2D _pixel;
 
         public GameRoot()
         {
@@ -41,36 +38,8 @@ namespace HexGame
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _device = _graphics.GraphicsDevice;
+
             GameStateManager.Instance.SetContent(Content);
-
-            _screenWidth = _device.PresentationParameters.BackBufferWidth;
-            _screenHeight = _device.PresentationParameters.BackBufferHeight;
-
-
-
-            _pixel = new Texture2D(GraphicsDevice, 1, 1);
-            _pixel.SetData(new[] { Color.White });
-
-            //Art.Load(Content);
-            //UserInterface.SetupInfoBar(_pixel, _screenWidth, _screenHeight);
-
-            //var test = new Scenario()
-            //{
-            //    Columns = 5,
-            //    Rows = 5,
-            //    Description = "Fart",
-            //    Title = "Tutle and styff",
-            //    Hexes = ScenarioManager.CreateHexes(5, 5)
-            //};
-
-            // ScenarioManager.LoadScenario(test);
-            //var scn = ScenarioManager.LoadFile("test1.xml");
-            //ScenarioManager.LoadScenario(test);
-            //ScenarioManager.SaveFile(test);
-            //ScenarioManager.CreateHexes(5, 5);
-
-            // _hex = new Hex(new Vector2(0, 0), new Vector2(0, 0), Types.TextureType.Hexagon, 0.5f);
-            // EntityManager.Add(hex);
             GameStateManager.Instance.AddScreen(new ScenarioEditorScreen(_device));
         }
 
@@ -81,14 +50,8 @@ namespace HexGame
 
         protected override void Update(GameTime gameTime)
         {
-            //if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-            //    Exit();
-
             GameStateManager.Instance.Update(gameTime);
 
-            //Input.Update();
-            //EntityManager.Update();
-            //UserInterface.Update();
             base.Update(gameTime);
         }
 
@@ -96,21 +59,9 @@ namespace HexGame
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            //_spriteBatch.Begin();
-
             GameStateManager.Instance.Draw(_spriteBatch);
-
-            //EntityManager.Draw(_spriteBatch);
-            //EntityManager.DrawTest(_spriteBatch, _pixel);
-            //UserInterface.Draw(_spriteBatch);
-            //_spriteBatch.End();
-
-            //_spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive);
-            //_spriteBatch.End();
 
             base.Draw(gameTime);
         }
     }
 }
-
-// https://github.com/sdevRay/ShapeBlaster/blob/master/ShapeBlaster/GameRoot.cs

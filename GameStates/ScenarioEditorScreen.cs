@@ -10,21 +10,15 @@ namespace HexGame.GameStates
     internal class ScenarioEditorScreen : GameState
     {
         private Texture2D _pixel;
+        public Camera2D Camera { get; set; }
 
         public ScenarioEditorScreen(GraphicsDevice device) : base(device)
         {
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            spriteBatch.Begin();
-            EntityManager.Draw(spriteBatch);
-            EntityManager.DrawTest(spriteBatch, _pixel);
-            spriteBatch.End();
-        }
-
         public override void Initialize()
         {
+            Camera = new Camera2D(GameRoot.Viewport, new Vector2(0, 0), 0.0f, 1.0f);
         }
 
         public override void LoadContent(ContentManager content)
@@ -44,12 +38,25 @@ namespace HexGame.GameStates
             };
 
             ScenarioManager.LoadScenario(test);
+            UserInterface.SetupInfoBar(_pixel, GameRoot.ScreenSize);
         }
 
         public override void Update(GameTime gameTime)
         {
             Input.Update();
+            Camera.Update(gameTime);
             EntityManager.Update();
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null,
+                    null, null, null, Camera.GetTransformation(_device));
+
+            EntityManager.Draw(spriteBatch);
+            EntityManager.DrawTest(spriteBatch, _pixel);
+            UserInterface.Draw(spriteBatch);
+            spriteBatch.End();
         }
 
         public override void UnloadContent()

@@ -5,10 +5,9 @@ namespace HexGame.Entities
 {
 	public abstract class Entity
     {
-        public Color Color = Color.White;
-        public Vector2 Position;
-        public float Scale;
-        public float Radius = 20;
+        protected Color Color = Color.White;
+        protected Vector2 Position;
+        protected float Scale;
 
         public abstract void Update();
         public abstract void Draw(SpriteBatch spriteBatch);

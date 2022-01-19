@@ -15,9 +15,9 @@ namespace HexGame
 		private static string Text = string.Empty;
 		private static Texture2D Pixel;
 
-		public static void SetupInfoBar(Texture2D pixel, int screenWidth, int screenHeight)
+		public static void SetupInfoBar(Texture2D pixel, Vector2 screenSize)
 		{
-			DestinationRectangle = new Rectangle(0, (int)(screenHeight * 0.85f), screenWidth, (int)(screenHeight * 0.25f));
+			DestinationRectangle = new Rectangle(0, (int)(screenSize.Y * 0.85f), (int)screenSize.X, (int)(screenSize.Y * 0.25f));
 			Pixel = pixel;
 		}
 
